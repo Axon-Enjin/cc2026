@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-label="Ciel logomark construction board">
+  <title>Ciel — Logomark Construction</title>
+  <desc>Construction geometry of the Ciel mark, with clear-space, minimum sizing, and color variants on a light editorial canvas.</desc>
+  <defs>
+    <g id="mark">
+      <path d="M75.3,28.8 A33,33 0 1,0 75.3,71.2" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+      <line x1="28" y1="56" x2="60" y2="56" stroke="currentColor" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+      <path d="M37,56 A11,11 0 0,1 59,56 Z" fill="#F2B450"/>
+    </g>
+  </defs>
+
+  <rect width="1280" height="800" fill="#F6F8FC"/>
+
+  <!-- header -->
+  <g font-family="'Public Sans','Helvetica Neue',Arial,sans-serif">
+    <text x="48" y="62" font-family="'Fraunces','Georgia',serif" font-size="26" font-weight="600" fill="#0B1533">Ciel</text>
+    <text x="120" y="62" font-size="12" letter-spacing="3" fill="#5A6685">LOGOMARK CONSTRUCTION</text>
+    <text x="1232" y="62" text-anchor="end" font-size="12" letter-spacing="3" fill="#5A6685">02</text>
+  </g>
+  <line x1="48" y1="86" x2="1232" y2="86" stroke="#E3E8F2"/>
+
+  <!-- ===== construction panel ===== -->
+  <g>
+    <rect x="48" y="130" width="624" height="600" rx="16" fill="#FFFFFF" stroke="#E3E8F2"/>
+    <text x="76" y="166" font-family="'Public Sans',sans-serif" font-size="11" letter-spacing="3" fill="#5A6685">GEOMETRY</text>
+
+    <!-- guides -->
+    <g stroke="#C9D4EC" fill="none" stroke-width="1">
+      <!-- bounding + crosshair, center (360,440) -->
+      <circle cx="360" cy="440" r="165"/>
+      <line x1="155" y1="440" x2="565" y2="440" stroke-dasharray="4 5"/>
+      <line x1="360" y1="235" x2="360" y2="645" stroke-dasharray="4 5"/>
+      <!-- sun guide circle, center (348,470) r55 -->
+      <circle cx="348" cy="470" r="55" stroke="#F2B450" stroke-opacity="0.7"/>
+    </g>
+
+    <!-- the mark, scaled x5 at origin (110,190) -->
+    <g transform="translate(110,190) scale(5)" color="#2456C8"><use href="#mark"/></g>
+
+    <!-- annotations -->
+    <g font-family="'JetBrains Mono','Courier New',monospace" font-size="12" fill="#5A6685">
+      <text x="360" y="225">r</text>
+      <text x="392" y="470" fill="#B07d18">☉ dawn</text>
+      <text x="150" y="690">opening 80° · stroke 1.3u · cap round</text>
+    </g>
+    <text x="76" y="712" font-family="'Public Sans',sans-serif" font-size="12.5" fill="#5A6685">The “C” is a sky dome; the gold dawn rises over the horizon inside its bowl.</text>
+  </g>
+
+  <!-- ===== clear space ===== -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="700" y="130" width="532" height="172" rx="16" fill="#FFFFFF" stroke="#E3E8F2"/>
+    <text x="728" y="166" font-size="11" letter-spacing="3" fill="#5A6685">CLEAR SPACE</text>
+    <rect x="900" y="186" width="96" height="96" fill="none" stroke="#C9D4EC" stroke-dasharray="4 5"/>
+    <g transform="translate(912,198) scale(0.72)" color="#2456C8"><use href="#mark"/></g>
+    <text x="728" y="214" font-size="13" fill="#0B1533">Keep clear space ≥ the</text>
+    <text x="728" y="234" font-size="13" fill="#0B1533">height of the dawn sun</text>
+    <text x="728" y="254" font-size="13" fill="#0B1533">on every side.</text>
+  </g>
+
+  <!-- ===== minimum size ===== -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="700" y="322" width="532" height="150" rx="16" fill="#FFFFFF" stroke="#E3E8F2"/>
+    <text x="728" y="358" font-size="11" letter-spacing="3" fill="#5A6685">MINIMUM SIZE</text>
+    <g transform="translate(728,372) scale(0.64)" color="#2456C8"><use href="#mark"/></g>
+    <g transform="translate(820,388) scale(0.40)" color="#2456C8"><use href="#mark"/></g>
+    <g transform="translate(884,398) scale(0.24)" color="#2456C8"><use href="#mark"/></g>
+    <text x="980" y="420" font-size="13" fill="#0B1533">Never below 24px / 16mm —</text>
+    <text x="980" y="440" font-size="13" fill="#0B1533">the dawn must stay legible.</text>
+  </g>
+
+  <!-- ===== color variants ===== -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="700" y="492" width="532" height="238" rx="16" fill="#FFFFFF" stroke="#E3E8F2"/>
+    <text x="728" y="528" font-size="11" letter-spacing="3" fill="#5A6685">VARIANTS</text>
+    <!-- on fog -->
+    <rect x="728" y="546" width="150" height="150" rx="10" fill="#F6F8FC" stroke="#E3E8F2"/>
+    <g transform="translate(760,578) scale(0.86)" color="#2456C8"><use href="#mark"/></g>
+    <text x="728" y="716" font-size="11.5" fill="#5A6685">On light</text>
+    <!-- on twilight -->
+    <rect x="894" y="546" width="150" height="150" rx="10" fill="#0B1533"/>
+    <g transform="translate(926,578) scale(0.86)" color="#EAF0FF"><use href="#mark"/></g>
+    <text x="894" y="716" font-size="11.5" fill="#5A6685">On twilight</text>
+    <!-- mono -->
+    <rect x="1060" y="546" width="150" height="150" rx="10" fill="#F6F8FC" stroke="#E3E8F2"/>
+    <g transform="translate(1092,578) scale(0.86)" color="#0B1533"><g><path d="M75.3,28.8 A33,33 0 1,0 75.3,71.2" fill="none" stroke="#0B1533" stroke-width="13" stroke-linecap="round"/><line x1="28" y1="56" x2="60" y2="56" stroke="#0B1533" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/><path d="M37,56 A11,11 0 0,1 59,56 Z" fill="#0B1533"/></g></g>
+    <text x="1060" y="716" font-size="11.5" fill="#5A6685">Mono</text>
+  </g>
+
+  <!-- footer -->
+  <g font-family="'Public Sans',sans-serif">
+    <text x="48" y="772" font-size="11.5" fill="#9aa6c2">Ciel — Impact Operating System</text>
+    <text x="1232" y="772" text-anchor="end" font-size="11.5" letter-spacing="2" fill="#9aa6c2">02 — CONSTRUCTION</text>
+  </g>
+</svg>

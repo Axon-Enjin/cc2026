@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-label="Ciel brand-kit overview board">
+  <title>Ciel — Brand System Overview</title>
+  <desc>A premium brand-guidelines board on a twilight canvas: logo cover, tagline, color system, typography, and a product application panel, in the Ciel dawn-over-dusk identity.</desc>
+  <defs>
+    <g id="mark">
+      <path d="M75.3,28.8 A33,33 0 1,0 75.3,71.2" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+      <line x1="28" y1="56" x2="60" y2="56" stroke="currentColor" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+      <path d="M37,56 A11,11 0 0,1 59,56 Z" fill="#F2B450"/>
+    </g>
+  </defs>
+
+  <!-- canvas -->
+  <rect width="1280" height="800" fill="#0B1533"/>
+
+  <!-- header -->
+  <g font-family="'Public Sans','Helvetica Neue',Arial,sans-serif">
+    <text x="48" y="62" font-family="'Fraunces','Georgia',serif" font-size="26" font-weight="600" fill="#EAF0FF" letter-spacing="0.5">Ciel</text>
+    <text x="120" y="62" font-size="12" letter-spacing="3" fill="#9FB0D6">BRAND SYSTEM</text>
+    <text x="1232" y="62" text-anchor="end" font-size="12" letter-spacing="3" fill="#9FB0D6">v1.0 · 2026</text>
+  </g>
+  <line x1="48" y1="86" x2="1232" y2="86" stroke="#26365F" stroke-width="1"/>
+
+  <!-- ============ HERO / LOGO COVER ============ -->
+  <g>
+    <rect x="48" y="130" width="780" height="300" rx="16" fill="#13224C" stroke="#26365F"/>
+    <text x="76" y="166" font-family="'Public Sans',sans-serif" font-size="11" letter-spacing="3" fill="#9FB0D6">LOGO</text>
+    <!-- big mark -->
+    <g transform="translate(96,196) scale(1.9)" color="#EAF0FF"><use href="#mark"/></g>
+    <!-- wordmark -->
+    <text x="300" y="300" font-family="'Fraunces','Georgia',serif" font-size="104" font-weight="600" fill="#EAF0FF" letter-spacing="-2">Ciel</text>
+    <text x="304" y="338" font-family="'Public Sans',sans-serif" font-size="14" letter-spacing="4" fill="#9FB0D6">SI-YEL · FRENCH FOR “SKY”</text>
+    <!-- faint horizon + dawn accent -->
+    <line x1="76" y1="398" x2="800" y2="398" stroke="#F2B450" stroke-opacity="0.5" stroke-width="2"/>
+    <text x="76" y="420" font-family="'Public Sans',sans-serif" font-size="12" fill="#9FB0D6">Lifting interventions from pilot to scale.</text>
+  </g>
+
+  <!-- ============ TAGLINE ============ -->
+  <g>
+    <rect x="852" y="130" width="380" height="300" rx="16" fill="#F2B450"/>
+    <text x="880" y="166" font-family="'Public Sans',sans-serif" font-size="11" letter-spacing="3" fill="#7A5410">ESSENCE</text>
+    <text x="880" y="250" font-family="'Fraunces','Georgia',serif" font-size="46" font-weight="600" fill="#0B1533">From pilot</text>
+    <text x="880" y="300" font-family="'Fraunces','Georgia',serif" font-size="46" font-weight="600" fill="#0B1533">to scale.</text>
+    <g transform="translate(1150,330) scale(0.7)" color="#0B1533" opacity="0.9"><use href="#mark"/></g>
+    <text x="880" y="406" font-family="'Public Sans',sans-serif" font-size="12" fill="#7A5410">We’ll also tell you when to stop.</text>
+  </g>
+
+  <!-- ============ COLOR ============ -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="48" y="454" width="378" height="298" rx="16" fill="#13224C" stroke="#26365F"/>
+    <text x="76" y="490" font-size="11" letter-spacing="3" fill="#9FB0D6">COLOR</text>
+    <!-- chips -->
+    <g>
+      <rect x="76" y="506" width="150" height="34" rx="7" fill="#0B1533" stroke="#3a4a72"/>
+      <text x="76" y="562" font-size="11.5" fill="#C9D4EC">Twilight · #0B1533</text>
+      <rect x="252" y="506" width="150" height="34" rx="7" fill="#2456C8"/>
+      <text x="252" y="562" font-size="11.5" fill="#C9D4EC">Horizon · #2456C8</text>
+
+      <rect x="76" y="586" width="150" height="34" rx="7" fill="#F2B450"/>
+      <text x="76" y="642" font-size="11.5" fill="#C9D4EC">Dawn Gold · #F2B450</text>
+      <rect x="252" y="586" width="150" height="34" rx="7" fill="#3FA7C9"/>
+      <text x="252" y="642" font-size="11.5" fill="#C9D4EC">Data Cyan · #3FA7C9</text>
+
+      <rect x="76" y="666" width="150" height="34" rx="7" fill="#F6F8FC"/>
+      <text x="76" y="722" font-size="11.5" fill="#C9D4EC">Fog · #F6F8FC</text>
+      <rect x="252" y="666" width="150" height="34" rx="7" fill="#2E9E6B"/>
+      <text x="252" y="722" font-size="11.5" fill="#C9D4EC">Verdant · #2E9E6B</text>
+    </g>
+  </g>
+
+  <!-- ============ TYPE ============ -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="450" y="454" width="378" height="298" rx="16" fill="#13224C" stroke="#26365F"/>
+    <text x="478" y="490" font-size="11" letter-spacing="3" fill="#9FB0D6">TYPE</text>
+    <text x="478" y="576" font-family="'Fraunces','Georgia',serif" font-size="96" font-weight="600" fill="#EAF0FF">Aa</text>
+    <text x="620" y="540" font-family="'Fraunces','Georgia',serif" font-size="22" fill="#EAF0FF">Fraunces</text>
+    <text x="620" y="562" font-size="12" fill="#9FB0D6">Display — warm serif</text>
+    <text x="478" y="636" font-size="16" fill="#EAF0FF">Public Sans — civic humanist sans for text &amp; UI</text>
+    <line x1="478" y1="660" x2="800" y2="660" stroke="#26365F"/>
+    <text x="478" y="700" font-family="'JetBrains Mono','Courier New',monospace" font-size="15" fill="#3FA7C9">0123456789 · JetBrains Mono</text>
+    <text x="478" y="726" font-size="11.5" fill="#9FB0D6">Civic legibility, not Inter. Craft, not slop.</text>
+  </g>
+
+  <!-- ============ APPLICATION (UI) ============ -->
+  <g font-family="'Public Sans',sans-serif">
+    <rect x="852" y="454" width="380" height="298" rx="16" fill="#13224C" stroke="#26365F"/>
+    <text x="880" y="490" font-size="11" letter-spacing="3" fill="#9FB0D6">APPLICATION</text>
+    <!-- app card -->
+    <rect x="880" y="506" width="324" height="220" rx="12" fill="#F6F8FC"/>
+    <!-- app header -->
+    <g transform="translate(898,524) scale(0.34)" color="#2456C8"><use href="#mark"/></g>
+    <text x="942" y="544" font-family="'Fraunces','Georgia',serif" font-size="18" font-weight="600" fill="#0B1533">Ciel</text>
+    <text x="1188" y="544" text-anchor="end" font-size="10.5" fill="#5A6685">Project · Cebu Youth Jobs</text>
+    <line x1="898" y1="556" x2="1186" y2="556" stroke="#E3E8F2"/>
+    <!-- mini chart: indicator vs horizon assumption -->
+    <text x="898" y="582" font-size="11" fill="#5A6685">Attendance vs assumption</text>
+    <line x1="898" y1="660" x2="1186" y2="660" stroke="#F2B450" stroke-width="2" stroke-dasharray="4 4"/>
+    <polyline points="898,650 936,642 974,648 1012,632 1050,636 1088,618 1126,624 1164,604" fill="none" stroke="#2456C8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="1164" cy="604" r="4" fill="#2456C8"/>
+    <!-- signal chip -->
+    <rect x="898" y="680" width="92" height="28" rx="14" fill="#E7F4EE"/>
+    <circle cx="916" cy="694" r="4" fill="#2E9E6B"/>
+    <text x="928" y="698" font-size="11.5" fill="#1E6B47">Scale</text>
+    <text x="1000" y="698" font-size="10.5" fill="#5A6685">grounded · human-approved</text>
+  </g>
+
+  <!-- footer -->
+  <g font-family="'Public Sans',sans-serif">
+    <text x="48" y="784" font-size="11.5" fill="#5A6685">Impact Operating System for the social sector — Create &amp; Conquer 2026</text>
+    <text x="1232" y="784" text-anchor="end" font-size="11.5" letter-spacing="2" fill="#5A6685">01 — IDENTITY</text>
+  </g>
+</svg>
