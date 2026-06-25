@@ -14,8 +14,7 @@ langgraph==0.2.45
 langchain==0.3.7
 langchain-core==0.3.15
 
-# Microsoft Foundry (Azure OpenAI)
-anthropic==0.39.0
+# Microsoft Foundry (Azure OpenAI) — GPT-only runtime (cr-ciel-002)
 openai==1.54.0
 
 # Data Validation
