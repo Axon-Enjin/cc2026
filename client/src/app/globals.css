@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Light theme — Product Mode default (DSD §2) */
+  --color-bg: #F6F8FC;
+  --color-surface: #FFFFFF;
+  --color-border: #E3E8F2;
+  --color-primary: #2456C8;        /* Horizon Blue */
+  --color-primary-hover: #1C46A6;
+  --color-accent: #F2B450;         /* Dawn Gold */
+  --color-text: #0B1533;
+  --color-text-muted: #5A6685;
+  --color-success: #2E9E6B;
+  --color-warning: #E0922F;
+  --color-error: #D5443C;
+  --color-data: #3FA7C9;
+
+  /* Spacing — 4px base (DSD §3) */
+  --spacing-1: 4px;  --spacing-2: 8px;  --spacing-3: 12px;
+  --spacing-4: 16px; --spacing-6: 24px; --spacing-8: 32px; --spacing-12: 48px;
+
+  /* Radius (DSD §4) */
+  --radius-control: 8px;
+  --radius-surface: 12px;
+
+  /* Elevation (DSD §2) */
+  --shadow-sm: 0 1px 2px rgba(11,21,51,0.06);
+  --shadow-md: 0 4px 12px rgba(11,21,51,0.08);
+  --shadow-lg: 0 12px 32px rgba(11,21,51,0.12);
+
+  /* Typeface bindings (DSD §2) */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Landing sticky nav height (scroll-margin offset) */
+  --nav-height: 64px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark theme — Brand Mode surfaces (DSD §2). Cascade override. */
+[data-theme="dark"] {
+  --color-bg: #0B1533;             /* Twilight canvas */
+  --color-surface: #13224C;
+  --color-border: #26365F;
+  --color-text: #EAF0FF;
+  --color-text-muted: #9FB0D6;
+  /* --color-accent unchanged (#F2B450) — the through-line across themes */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+ * DSD §2 typographic role utilities (task 1.4)
+ * Role classes for downstream sections/primitives. These reference the
+ * next/font CSS variables bound on <html> in layout.tsx, falling back to the
+ * @theme font tokens (owned by task 1.2). This block intentionally does NOT
+ * redefine the @theme token block or the [data-theme] override block.
+ * ------------------------------------------------------------------------- */
+@layer components {
+  /* Display / H1 — Fraunces 600, responsive clamp */
+  .text-display {
+    font-family: var(--font-fraunces, var(--font-display));
+    font-weight: 600;
+    font-size: clamp(2.25rem, 5.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Stat callout — Fraunces, between H2 and display (Problem section) */
+  .text-stat {
+    font-family: var(--font-fraunces, var(--font-display));
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    line-height: 1.15;
+  }
+
+  /* Heading 2 — Fraunces 600 28px / 1.2 */
+  .text-h2 {
+    font-family: var(--font-fraunces, var(--font-display));
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  /* Heading 3 — Public Sans 600 20px / 1.3 */
+  .text-h3 {
+    font-family: var(--font-public-sans, var(--font-sans));
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+
+  /* Body — Public Sans 400 16px / 1.6 */
+  .text-body {
+    font-family: var(--font-public-sans, var(--font-sans));
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Small / Caption — Public Sans 400 13px / 1.5 */
+  .text-small {
+    font-family: var(--font-public-sans, var(--font-sans));
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Mono / Code / Data — JetBrains Mono 400 13px / 1.5 */
+  .text-mono {
+    font-family: var(--font-jetbrains-mono, var(--font-mono));
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Hero atmosphere — dawn glow + grain (Brand Mode, static) */
+  .hero-dawn-glow {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 70% 55% at 85% 95%,
+        color-mix(in srgb, var(--color-accent) 18%, transparent),
+        transparent 65%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 70% 80%,
+        color-mix(in srgb, var(--color-primary) 8%, transparent),
+        transparent 60%
+      );
+  }
+
+  .hero-grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+  }
 }
