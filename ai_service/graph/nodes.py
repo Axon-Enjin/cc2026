@@ -161,12 +161,7 @@ async def draft_node(state: TocState) -> TocState:
     tokens = 0
     graph_dict: dict[str, Any]
 
-    ai_ready = bool(
-        settings.FOUNDRY_API_KEY
-        and settings.FOUNDRY_API_KEY not in ("", "your_foundry_api_key_here")
-    )
-
-    if ai_ready:
+    if settings.ai_ready:
         try:
             from ai_service.services.foundry_client import foundry_client
 
@@ -211,15 +206,10 @@ async def critique_node(state: TocState) -> TocState:
     evidence = state.get("retrieved_evidence", [])
     source_ids = [e["source_id"] for e in evidence if e.get("source_id")]
 
-    ai_ready = bool(
-        settings.FOUNDRY_API_KEY
-        and settings.FOUNDRY_API_KEY not in ("", "your_foundry_api_key_here")
-    )
-
     critiques: list[dict[str, Any]] = []
     tokens = 0
 
-    if ai_ready:
+    if settings.ai_ready:
         try:
             from ai_service.services.foundry_client import foundry_client
 

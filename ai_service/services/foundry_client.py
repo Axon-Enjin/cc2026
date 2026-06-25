@@ -24,19 +24,33 @@ class FoundryClient:
     """
     
     def __init__(self):
-        """Initialize Anthropic client for Azure AI Foundry."""
-        self.client = AsyncAnthropic(
-            api_key=settings.FOUNDRY_API_KEY,
-            base_url=settings.FOUNDRY_ENDPOINT,
-        )
-        
+        """Configure model + budget settings; defer SDK client creation.
+
+        The ``AsyncAnthropic`` client is built lazily on first use so importing
+        this module never requires valid Foundry credentials (mirrors the
+        Supabase client). This keeps the app importable for tests/local boot.
+        """
+        self._client: Optional[AsyncAnthropic] = None
+
         # Model configurations per SDD §8
         self.sonnet_model = "claude-3-5-sonnet-20241022"  # For generation
         self.opus_model = "claude-3-opus-20240229"  # For critique
-        
+
         # Token budgets
         self.max_tokens_generation = settings.MAX_TOKENS_TOC_GENERATION  # 12000
         self.max_tokens_critique = settings.MAX_TOKENS_CRITIQUE  # 10000
+
+    @property
+    def client(self) -> AsyncAnthropic:
+        """Lazily construct the Anthropic client with bounded timeout/retries."""
+        if self._client is None:
+            self._client = AsyncAnthropic(
+                api_key=settings.FOUNDRY_API_KEY,
+                base_url=settings.FOUNDRY_ENDPOINT,
+                timeout=settings.FOUNDRY_TIMEOUT_SECONDS,
+                max_retries=settings.FOUNDRY_MAX_RETRIES,
+            )
+        return self._client
     
     async def generate_toc(
         self,
