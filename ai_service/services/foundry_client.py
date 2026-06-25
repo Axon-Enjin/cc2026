@@ -16,6 +16,7 @@ gpt-4o-class deployment that uses ``temperature`` + ``max_tokens``).
 import json
 import logging
 from typing import Any, AsyncIterator, Dict, List, Optional
+from urllib.parse import urlparse
 
 from openai import AsyncAzureOpenAI
 
@@ -51,9 +52,19 @@ class FoundryClient:
     def client(self) -> AsyncAzureOpenAI:
         """Lazily construct the Azure OpenAI client with bounded timeout/retries."""
         if self._client is None:
+            # AsyncAzureOpenAI expects the resource *base* origin
+            # (https://<resource>.services.ai.azure.com) and appends the
+            # deployment path itself. Tolerate a full path in FOUNDRY_ENDPOINT
+            # (e.g. ".../openai/v1/responses") by reducing it to scheme://host.
+            parsed = urlparse(settings.FOUNDRY_ENDPOINT)
+            base_endpoint = (
+                f"{parsed.scheme}://{parsed.netloc}"
+                if parsed.scheme and parsed.netloc
+                else settings.FOUNDRY_ENDPOINT
+            )
             self._client = AsyncAzureOpenAI(
                 api_key=settings.FOUNDRY_API_KEY,
-                azure_endpoint=settings.FOUNDRY_ENDPOINT,
+                azure_endpoint=base_endpoint,
                 api_version=settings.FOUNDRY_API_VERSION,
                 timeout=settings.FOUNDRY_TIMEOUT_SECONDS,
                 max_retries=settings.FOUNDRY_MAX_RETRIES,
@@ -73,9 +84,12 @@ class FoundryClient:
         traditional ``temperature`` + ``max_tokens`` pair.
         """
         if settings.FOUNDRY_REASONING_MODEL:
+            # `reasoning_effort` isn't a top-level kwarg on chat.completions in all
+            # SDK versions — pass it through extra_body so it lands in the request
+            # JSON regardless of the installed openai version.
             return {
                 "max_completion_tokens": max_tokens,
-                "reasoning_effort": reasoning_effort,
+                "extra_body": {"reasoning_effort": reasoning_effort},
             }
         return {
             "max_tokens": max_tokens,
@@ -231,6 +245,49 @@ Provide a thorough critique following the system instructions. Focus on substant
             return response.choices[0].message.content or ""
         except Exception as e:
             logger.error(f"Critique generation failed: {e}")
+            raise
+
+    async def generate_grant(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float = 0.4,
+    ) -> str:
+        """
+        Draft a funder-matched grant proposal (PRD-F2).
+
+        Lower temperature than ToC generation for grounded, funder-aligned prose
+        (ignored for reasoning models). Returns a JSON string of
+        {"sections": [...]} per the system prompt.
+        """
+        messages: List[Dict[str, str]] = [
+            {"role": "system", "content": system_prompt},
+            {
+                "role": "user",
+                "content": (
+                    f"{user_prompt}\n\nDraft the proposal sections following the system "
+                    "instructions. Ground every claim in the provided ToC nodes/evidence or "
+                    "mark it [UNVERIFIED - needs human input]. Return a single valid JSON object."
+                ),
+            },
+        ]
+
+        kwargs = self._completion_kwargs(
+            max_tokens=self.max_tokens_generation,
+            temperature=temperature,
+            reasoning_effort=settings.FOUNDRY_REASONING_EFFORT_GENERATION,
+        )
+
+        try:
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                response_format={"type": "json_object"},
+                **kwargs,
+            )
+            return response.choices[0].message.content or ""
+        except Exception as e:
+            logger.error(f"Grant generation failed: {e}")
             raise
 
     async def extract_structured_output(

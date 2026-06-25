@@ -41,6 +41,7 @@ Every material change to a Locked document is recorded as a Change Record. Newes
 
 | CR ID | Date | Summary | Trigger doc | Docs touched | File |
 |-------|------|---------|-------------|--------------|------|
+| ciel-cr-004 | 2026-06-26 | Implement **PRD-F2 grant writing**: `funders` catalog + `grant_proposals` extension + RLS; AI `/grants/generate` pipeline (template fallback); Grant Workspace UI (generate, edit, regenerate, funder-KPI alignment, export) | prd-ciel.md (F2), sdd-ciel.md | index.md, sdd-ciel.md, supabase/migrations, ai_service, client | [cr-ciel-004.md](cr-ciel-004.md) |
 | ciel-cr-003 | 2026-06-26 | Onboarding bootstrap: `create_organization` `SECURITY DEFINER` RPC + first-member membership policy (atomic org+admin create, fixes RLS chicken-and-egg); reconciled local migration history with the hosted DB | sdd-ciel.md | index.md, sdd-ciel.md, supabase/migrations | [cr-ciel-003.md](cr-ciel-003.md) |
 | ciel-cr-002 | 2026-06-26 | Runtime model → **GPT-only** on Microsoft Foundry (tenant exposes only GPT; Claude dropped from runtime); critique kept as a separate GPT pass | sdd-ciel.md | index.md, sdd-ciel.md, prd-ciel.md, rfc-ciel-toc-generator.md, rfc-ciel-field-mande.md, clr-ciel.md, build-ciel.md, evidence-ciel.md, gtm-ciel.md | [cr-ciel-002.md](cr-ciel-002.md) |
 | ciel-cr-001 | 2026-06-25 | AI service hosting: Azure Container Apps → Azure App Service (non-containerized); frontend stays on Vercel | sdd-ciel.md | sdd-ciel.md, ops-ciel.md | [cr-ciel-001.md](cr-ciel-001.md) |

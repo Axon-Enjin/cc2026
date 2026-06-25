@@ -325,12 +325,20 @@ export function TocStudio({
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
             Assumptions extracted for M&amp;E monitoring. You can proceed to grant drafting or field capture.
           </p>
-          <Link
-            href="/dashboard"
-            className="mt-4 inline-block text-sm font-medium text-[var(--color-primary)] hover:underline"
-          >
-            Back to dashboard →
-          </Link>
+          <div className="mt-4 flex flex-wrap items-center gap-4">
+            <Link
+              href={`/projects/${projectId}/grants`}
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-primary-hover)]"
+            >
+              Draft a grant proposal →
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm font-medium text-[var(--color-primary)] hover:underline"
+            >
+              Back to dashboard
+            </Link>
+          </div>
         </div>
       )}
 
