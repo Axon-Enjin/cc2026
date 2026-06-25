@@ -69,7 +69,7 @@ graph TD
 | Service / Compute | Python 3.12, FastAPI, LangGraph | ToC generation graph, grant drafting, M&E signal computation, RAG orchestration |
 | AI control plane | **Microsoft Foundry** (Foundry Agent Service on Responses API; Foundry IQ managed retrieval) | Model hosting (Claude primary, GPT fallback), agent runtime, RAG over evidence corpus |
 | Data | PostgreSQL + pgvector (Supabase), Object Storage | App data, embeddings, audit log, field media |
-| Infrastructure | Vercel (Next.js) + Azure Container Apps (Python service, co-located with Foundry) | Hosting, scaling, secrets |
+| Infrastructure | Vercel (Next.js) + Azure App Service (Python service, non-containerized — Linux/Python runtime, co-located with Foundry) | Hosting, scaling, secrets |
 
 ---
 
@@ -250,8 +250,8 @@ graph TD
 
 ## 6. Infrastructure, CI/CD & Deployment
 
-**Hosting:** Vercel (Next.js app + Route Handlers); Azure Container Apps (Python AI service, co-located with Foundry to cut latency + keep data in-region); Supabase (DB/Auth/Storage); Upstash Redis.
-**Environments:** `dev` (local + Supabase branch), `staging` (Vercel preview + staging Foundry deployment), `prod` (Vercel prod + ACA).
+**Hosting:** Vercel (Next.js app + Route Handlers); Azure App Service (Python AI service, **non-containerized** — Linux Python runtime, source/zip deploy via Oryx build, co-located with Foundry to cut latency + keep data in-region); Supabase (DB/Auth/Storage); Upstash Redis.
+**Environments:** `dev` (local + Supabase branch), `staging` (Vercel preview + staging Foundry deployment), `prod` (Vercel prod + Azure App Service).
 **CI/CD:** GitHub Actions — lint → type-check → test (incl. AI eval gate from QAD) → deploy. Preview on PR; prod on tagged release. Feature flags gate Modules 2–3.
 **Backup & DR:**
 - Backups: Supabase automated daily snapshots, 30-day retention; object storage versioned.

@@ -41,7 +41,7 @@ Every material change to a Locked document is recorded as a Change Record. Newes
 
 | CR ID | Date | Summary | Trigger doc | Docs touched | File |
 |-------|------|---------|-------------|--------------|------|
-| — | — | No change records yet (initial suite authored 2026-06-25) | — | — | — |
+| ciel-cr-001 | 2026-06-25 | AI service hosting: Azure Container Apps → Azure App Service (non-containerized); frontend stays on Vercel | sdd-ciel.md | sdd-ciel.md, ops-ciel.md | [cr-ciel-001.md](cr-ciel-001.md) |
 
 ---
 
