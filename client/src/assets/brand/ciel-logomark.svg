@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Ciel logomark — a C as a sky dome with a dawn sun rising over the horizon">
+  <title>Ciel logomark</title>
+  <desc>The letter C drawn as a sky dome; inside, a gold dawn sun rises over a horizon line — the lift from pilot to scale.</desc>
+  <!-- C / sky dome -->
+  <path d="M75.3,28.8 A33,33 0 1,0 75.3,71.2" fill="none" stroke="#2456C8" stroke-width="13" stroke-linecap="round"/>
+  <!-- horizon -->
+  <line x1="28" y1="56" x2="60" y2="56" stroke="#2456C8" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+  <!-- dawn sun rising over the horizon -->
+  <path d="M37,56 A11,11 0 0,1 59,56 Z" fill="#F2B450"/>
+</svg>
