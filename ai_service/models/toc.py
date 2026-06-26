@@ -102,7 +102,12 @@ class TocAssumption(BaseModel):
 class TocGenerationRequest(BaseModel):
     """Request to generate a Theory of Change."""
     project_id: UUID = Field(..., description="Project UUID")
-    need: str = Field(..., min_length=10, description="Plain-language social need")
+    need: str = Field(
+        ...,
+        min_length=10,
+        max_length=5000,
+        description="Plain-language social need",
+    )
     context: dict = Field(
         default_factory=dict,
         description="Additional context (region, population, etc.)"

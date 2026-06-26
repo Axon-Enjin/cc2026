@@ -64,7 +64,10 @@ async def readiness_check():
         checks["database_connected"] = supabase_healthy
     except Exception as e:
         checks["database_connected"] = False
-        checks["database_error"] = str(e)
+        # Only surface raw error detail outside production to avoid leaking
+        # internal topology/credentials in error strings.
+        if not settings.is_production:
+            checks["database_error"] = str(e)
 
     # Only probe Foundry when credentials are actually configured — otherwise
     # the call is guaranteed to fail and just adds latency. AI is an optional
@@ -76,7 +79,8 @@ async def readiness_check():
             checks["foundry_accessible"] = await foundry_client.health_check()
         except Exception as e:
             checks["foundry_accessible"] = False
-            checks["foundry_error"] = str(e)
+            if not settings.is_production:
+                checks["foundry_error"] = str(e)
     else:
         checks["foundry_accessible"] = None  # not configured
 
