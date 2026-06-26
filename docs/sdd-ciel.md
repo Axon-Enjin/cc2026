@@ -5,7 +5,7 @@
 **Version:** 1.0
 **Owner:** Ciel Team — Create & Conquer 2026
 **Status:** Locked
-**Last reconciled:** 2026-06-25
+**Last reconciled:** 2026-06-26
 **PRD:** [prd-ciel.md](prd-ciel.md) · **Evidence:** [evidence-ciel.md](evidence-ciel.md) · **Build:** [build-ciel.md](build-ciel.md)
 
 ---
@@ -41,10 +41,12 @@ graph TD
     subgraph Edge/API
       RH[Next.js Route Handlers + Server Actions]
     end
-    subgraph AIService[Python AI Service - FastAPI + LangGraph]
-      TOC[ToC graph]
-      GRANT[Grant drafting]
-      MANDE[M&E signal engine]
+    subgraph CloudRun[Google Cloud Run]
+      subgraph AIService[Python AI Service - FastAPI + LangGraph]
+        TOC[ToC graph]
+        GRANT[Grant drafting]
+        MANDE[M&E signal engine]
+      end
     end
     Foundry[(Microsoft Foundry - Agent Service + Foundry IQ; GPT-only)]
     DB[(Postgres + pgvector - Supabase)]
@@ -69,7 +71,7 @@ graph TD
 | Service / Compute | Python 3.12, FastAPI, LangGraph | ToC generation graph, grant drafting, M&E signal computation, RAG orchestration |
 | AI control plane | **Microsoft Foundry** (Foundry Agent Service on Responses API; Foundry IQ managed retrieval) | Model hosting (**GPT-only** — GPT frontier for generation + critique, GPT-mini for cheap parse), agent runtime, RAG over evidence corpus |
 | Data | PostgreSQL + pgvector (Supabase), Object Storage | App data, embeddings, audit log, field media |
-| Infrastructure | Vercel (Next.js) + Azure App Service (Python service, non-containerized — Linux/Python runtime, co-located with Foundry) | Hosting, scaling, secrets |
+| Infrastructure | Vercel (Next.js) + **Google Cloud Run** (Python AI service, containerized — `ai_service/Dockerfile`, managed HTTPS, autoscale) | Hosting, scaling, secrets |
 
 ---
 
@@ -263,7 +265,7 @@ graph TD
 **Authorization model:** Postgres **Row-Level Security** keyed on `memberships`; role gates (admin/program/field/viewer). Field role can write `field_entries` but not read financials. First-member onboarding uses a scoped bootstrap policy + a `SECURITY DEFINER` RPC (`create_organization`) to avoid the empty-membership chicken-and-egg ([CR-003](cr-ciel-003.md)).
 **Data protection:**
 - PII encrypted at rest (Supabase managed) + RLS; field-subject data minimized and consented (RA 10173 → CLR).
-- Secrets in platform env (Vercel / Azure), never committed; Foundry keys scoped to the AI service.
+- Secrets in platform env (Vercel / GCP Secret Manager), never committed; Foundry keys scoped to the AI service.
 - Input validation: Zod (Next.js) + Pydantic (FastAPI) on every boundary.
 - Append-only `audit_log` for consequential actions (PRD US-05).
 
@@ -271,9 +273,9 @@ graph TD
 
 ## 6. Infrastructure, CI/CD & Deployment
 
-**Hosting:** Vercel (Next.js app + Route Handlers); Azure App Service (Python AI service, **non-containerized** — Linux Python runtime, source/zip deploy via Oryx build, co-located with Foundry to cut latency + keep data in-region); Supabase (DB/Auth/Storage); Upstash Redis.
-**Environments:** `dev` (local + Supabase branch), `staging` (Vercel preview + staging Foundry deployment), `prod` (Vercel prod + Azure App Service).
-**CI/CD:** GitHub Actions — lint → type-check → test (incl. AI eval gate from QAD) → deploy. Preview on PR; prod on tagged release. Feature flags gate Modules 2–3.
+**Hosting:** Vercel (Next.js app + Route Handlers); **Google Cloud Run** (Python AI service, **containerized** — build from [ai_service/Dockerfile](../ai_service/Dockerfile), deploy via `gcloud run deploy` or Cloud Build; managed HTTPS, autoscale-to-zero in staging); Supabase (DB/Auth/Storage); Upstash Redis. Microsoft Foundry (model inference) remains a separate Azure-hosted control plane called over HTTPS.
+**Environments:** `dev` (local + Supabase branch), `staging` (Vercel preview + Cloud Run staging service + staging Foundry deployment), `prod` (Vercel prod + Cloud Run prod service).
+**CI/CD:** GitHub Actions — lint → type-check → test (incl. AI eval gate from QAD) → build container → deploy to Cloud Run. Preview on PR; prod on tagged release. Feature flags gate Modules 2–3.
 **Backup & DR:**
 - Backups: Supabase automated daily snapshots, 30-day retention; object storage versioned.
 - **RTO 4h · RPO 24h** for V1/pilot.

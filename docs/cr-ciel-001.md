@@ -17,6 +17,8 @@ Change the Python AI service hosting target from **Azure Container Apps (contain
 - Azure App Service's Linux Python runtime (source/zip deploy via the Oryx build) is sufficient for the FastAPI + LangGraph service at pilot scale and ships faster.
 - No Dockerfile exists in the repo yet; adopting App Service avoids introducing one.
 
+> **Note (2026-06-26):** Superseded for the hosting target by [cr-ciel-005.md](cr-ciel-005.md) — a Dockerfile now exists and production deploy targets Google Cloud Run.
+
 ## 3. Scope of change
 
 | Doc | Section | Change |

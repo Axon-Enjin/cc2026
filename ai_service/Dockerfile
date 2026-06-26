@@ -1,7 +1,7 @@
 # Ciel AI Service — production image
 # Multi-stage build keeps the final image small and free of build tooling.
 
-FROM python:3.13-slim AS builder
+FROM python:3.12-slim AS builder
 
 ENV PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
@@ -13,7 +13,7 @@ RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install -r requirements.txt
 
 
-FROM python:3.13-slim AS runtime
+FROM python:3.12-slim AS runtime
 
 # Run as a non-root user.
 RUN useradd --create-home --uid 10001 appuser

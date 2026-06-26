@@ -248,3 +248,9 @@ This hackathon rewards clarity as much as polish. A good submission should show:
 - A demo that is easy to follow
 
 If the team keeps those five things aligned, the final submission will be much easier to defend during judging.
+
+### **Hackathon Theme #2 (Our Selected Theme)**
+
+- **Problem Description**: Social impact organizations, including governments, NGOs, and community groups, continuously identify urgent needs such as education gaps, healthcare access limitations, disaster vulnerability, and livelihood insecurity.
+- While these needs are often well-documented: the pathway from identification -> solution design -> implementation -> scaling remains fragmented and inconsistent.
+- **Challenge Question**: How might we use AI to transform identified social needs into effective, context-aware solutions that can be immediately implemented and scaled? _(Note: This slide includes the IBM logo)._

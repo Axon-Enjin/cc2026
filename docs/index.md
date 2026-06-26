@@ -6,7 +6,7 @@
 
 > **About Ciel:** An AI-native *Impact Operating System* for the social sector (NGOs, LGUs, community coalitions) — built for **Theme #2** of the Create & Conquer 2026 Hackathon. Ciel turns an identified social need into a rigorous Theory of Change, funded grant proposals, and a live predictive M&E loop — closing the gap from *need identified* to *solution scaled*. Name: **Ciel** (French, "sky"; pronounced *ci-yel*).
 
-> **Read first:** [`evidence-ciel.md`](evidence-ciel.md) is the fact-check backbone — every load-bearing claim in the suite resolves to a row there. Source material: [`Idea.MD.md`](../Idea.MD.md), [`docs/theme.md`](theme.md), [`docs/hackathon-guide.md`](hackathon-guide.md).
+> **Read first:** [`evidence-ciel.md`](evidence-ciel.md) is the fact-check backbone — every load-bearing claim in the suite resolves to a row there. Source material: [`Idea.MD.md`](../Idea.MD.md), [`hackathon-guide.md`](hackathon-guide.md) (Theme #2 at §15).
 
 ---
 
@@ -24,7 +24,7 @@
 | BUILD — Build Guide | [build-ciel.md](build-ciel.md) | 1.0 | Locked | 2026-06-25 | 2026-06-25 |
 | CLR — Compliance & Legal | [clr-ciel.md](clr-ciel.md) | 1.0 | Locked | 2026-06-25 | 2026-06-25 |
 | GTM — Go-To-Market | [gtm-ciel.md](gtm-ciel.md) | 1.0 | Locked | 2026-06-25 | 2026-06-25 |
-| OPS — Ops & Observability | [ops-ciel.md](ops-ciel.md) | 1.0 | Locked | 2026-06-25 | 2026-06-25 |
+| OPS — Ops & Observability | [ops-ciel.md](ops-ciel.md) | 1.0 | Locked | 2026-06-25 | 2026-06-26 |
 
 ### RFCs (one per major feature)
 
@@ -32,6 +32,16 @@
 |--------|------|---------|--------|--------------|
 | ciel-rfc-001 | [rfc-ciel-toc-generator.md](rfc-ciel-toc-generator.md) | PRD-F1 — AI Theory-of-Change Generator | Locked | 2026-06-25 |
 | ciel-rfc-002 | [rfc-ciel-field-mande.md](rfc-ciel-field-mande.md) | PRD-F3 — Predictive M&E + low-connectivity field ingestion | Locked | 2026-06-25 |
+
+### Hackathon submission deliverables
+
+| Artifact | File | Notes |
+|----------|------|-------|
+| Proof of Concept | [PoC.md](PoC.md) | User flow + architecture diagrams; export via `node scripts/md_to_docx.mjs docs/PoC.md` |
+| Project Brief | [PROJECT_BRIEF.md](PROJECT_BRIEF.md) | Required sections A–H + optional; export via `node scripts/md_to_docx.mjs docs/PROJECT_BRIEF.md` |
+| Elimination video script | [elimination-video-script.md](elimination-video-script.md) | Timed 1–3 min demo script |
+| Finals scoring tool | [../scripts/score_finals.py](../scripts/score_finals.py) | Final Round rubric calculator |
+| Markdown → Word | [../scripts/md_to_docx.mjs](../scripts/md_to_docx.mjs) | Renders mermaid → PNG, then pandoc → `.docx` |
 
 ---
 
@@ -41,6 +51,7 @@ Every material change to a Locked document is recorded as a Change Record. Newes
 
 | CR ID | Date | Summary | Trigger doc | Docs touched | File |
 |-------|------|---------|-------------|--------------|------|
+| ciel-cr-005 | 2026-06-26 | AI service hosting: Azure App Service → **Google Cloud Run** (containerized); Foundry inference unchanged; Dockerfile aligned to Python 3.12 | sdd-ciel.md | index.md, sdd-ciel.md, ops-ciel.md, ai_service/Dockerfile | [cr-ciel-005.md](cr-ciel-005.md) |
 | ciel-cr-004 | 2026-06-26 | Implement **PRD-F2 grant writing**: `funders` catalog + `grant_proposals` extension + RLS; AI `/grants/generate` pipeline (template fallback); Grant Workspace UI (generate, edit, regenerate, funder-KPI alignment, export) | prd-ciel.md (F2), sdd-ciel.md | index.md, sdd-ciel.md, supabase/migrations, ai_service, client | [cr-ciel-004.md](cr-ciel-004.md) |
 | ciel-cr-003 | 2026-06-26 | Onboarding bootstrap: `create_organization` `SECURITY DEFINER` RPC + first-member membership policy (atomic org+admin create, fixes RLS chicken-and-egg); reconciled local migration history with the hosted DB | sdd-ciel.md | index.md, sdd-ciel.md, supabase/migrations | [cr-ciel-003.md](cr-ciel-003.md) |
 | ciel-cr-002 | 2026-06-26 | Runtime model → **GPT-only** on Microsoft Foundry (tenant exposes only GPT; Claude dropped from runtime); critique kept as a separate GPT pass | sdd-ciel.md | index.md, sdd-ciel.md, prd-ciel.md, rfc-ciel-toc-generator.md, rfc-ciel-field-mande.md, clr-ciel.md, build-ciel.md, evidence-ciel.md, gtm-ciel.md | [cr-ciel-002.md](cr-ciel-002.md) |
@@ -72,5 +83,5 @@ Every material change to a Locked document is recorded as a Change Record. Newes
 
 - **Scale:** authored at **Full** scale (all 11 FMD docs + INDEX) per team decision, to serve as a hackathon-grade, defensible documentation suite.
 - **Jurisdiction:** Philippines-first. B2G content uses **RA 12009 (NGPA)**; data handling uses **RA 10173 (Data Privacy Act)**.
-- **Stack:** Next.js 16 frontend (`client/`) + Python AI service (FastAPI + LangGraph) + **Microsoft Foundry** (formerly Azure AI Foundry) running **GPT-only** (GPT frontier for generation + the adversarial critique; GPT-mini for cheap classify/parse). See [cr-ciel-002.md](cr-ciel-002.md).
+- **Stack:** Next.js 16 frontend on Vercel (`client/`) + Python AI service on **Google Cloud Run** (FastAPI + LangGraph, containerized) + **Microsoft Foundry** (GPT-only runtime). See [cr-ciel-005.md](cr-ciel-005.md) (hosting) and [cr-ciel-002.md](cr-ciel-002.md) (models).
 - **Brand assets:** see [`/brand`](../brand) — overview board, logo construction, UI application, and logo SVGs. Brand stance is authored in the DSD §0.

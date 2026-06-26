@@ -6,7 +6,7 @@
 **Owner:** Ciel Team — Create & Conquer 2026
 **Status:** Locked
 **Last reconciled:** 2026-06-25
-**Evidence:** [evidence-ciel.md](evidence-ciel.md) · **Source idea:** [Idea.MD.md](../Idea.MD.md) · **Theme:** [theme.md](theme.md)
+**Evidence:** [evidence-ciel.md](evidence-ciel.md) · **Source idea:** [Idea.MD.md](../Idea.MD.md) · **Theme:** [hackathon-guide.md](hackathon-guide.md) §15 (Theme #2)
 
 ---
 

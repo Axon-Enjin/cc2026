@@ -4,12 +4,22 @@ Welcome to the documentation and planning workspace for the **Create & Conquer 2
 
 This repository serves as the central hub for the event's core guidelines, theme details, and internal notes.
 
+## Ciel — Hackathon Submission (Theme #2)
+
+| Deliverable | File |
+|-------------|------|
+| Proof of Concept | [`docs/PoC.md`](docs/PoC.md) |
+| Project Brief | [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md) |
+| Video demo script (1–3 min) | [`docs/elimination-video-script.md`](docs/elimination-video-script.md) |
+| Finals scoring tool | [`scripts/score_finals.py`](scripts/score_finals.py) |
+| Export MD → Word (.docx) | `node scripts/md_to_docx.mjs docs/PoC.md` *(requires [pandoc](https://pandoc.org/))* |
+
+Full documentation index: [`docs/index.md`](docs/index.md)
+
 ## 📁 Repository Structure
 
 - [**`hackathon-guide.md`**](docs/hackathon-guide.md)
-  The comprehensive participant primer and practical working reference. It covers everything from the event timeline and eligibility to submission checklists, team roles, and judging criteria.
-- [**`theme.md`**](docs/theme.md)
-  Contains the core "How might we..." problem statements that serve as the foundation for participant ideation during the hackathon.
+  The comprehensive participant primer and practical working reference. It covers everything from the event timeline and eligibility to submission checklists, team roles, judging criteria, and **Theme #2** (§15).
 
 - [**`judges.md`**](docs/judges.md)
   Profiles, areas of expertise, and internal organizer notes regarding the confirmed judging panel (e.g., Reynaldo Bagua, Engr. John Edward Adriano, Justine Tence).

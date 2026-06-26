@@ -40,7 +40,8 @@
 **Test data setup:**
 ```bash
 pnpm db:seed:test          # seed orgs, projects, a locked ToC, evidence corpus sample
-python scripts/seed_eval.py  # seed the AI eval fixtures
+python scripts/run_eval.py --suite core --gate   # AI eval gate (QAD §4)
+python -m ai_service.scripts.seed_evidence       # seed evidence corpus for RAG tests
 ```
 
 ---
