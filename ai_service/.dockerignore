@@ -1,0 +1,22 @@
+# Build context hygiene for the AI service image.
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+.venv/
+venv/
+.env
+ai_service/.env
+*.env
+.git/
+.gitignore
+**/tests/
+*.md
+docs/
+client/
+brand/
+FMD/
+supabase/
+scripts/
