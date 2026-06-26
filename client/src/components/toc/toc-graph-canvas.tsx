@@ -9,6 +9,7 @@ import {
   validateEdges,
 } from "./toc-graph-layout";
 import { TocProvenanceChip } from "./toc-provenance-chip";
+import { stripUnverifiedMarkers } from "@/lib/provenance-content";
 import {
   NODE_TYPE_LABELS,
   NODE_TYPE_ORDER,
@@ -293,7 +294,7 @@ const NodeCard = React.forwardRef<HTMLButtonElement, NodeCardProps>(
           className="mt-1 line-clamp-3 flex-1 text-[14px] leading-snug text-[var(--color-text)]"
           title={node.text}
         >
-          {node.text}
+          {stripUnverifiedMarkers(node.text)}
         </p>
         <div className="mt-2">
           <TocProvenanceChip sourceIds={node.source_ids} />

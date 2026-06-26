@@ -172,6 +172,21 @@ export default async function DashboardPage({
 
   }
 
+  const grantStatusByProject = new Map<string, string>();
+  if (projectIds.length > 0) {
+    const { data: grantRows } = await supabase
+      .from("grant_proposals")
+      .select("project_id, status, updated_at")
+      .in("project_id", projectIds)
+      .order("updated_at", { ascending: false });
+
+    for (const row of grantRows ?? []) {
+      if (!grantStatusByProject.has(row.project_id)) {
+        grantStatusByProject.set(row.project_id, row.status);
+      }
+    }
+  }
+
 
 
   const total = projects.length;
@@ -369,6 +384,8 @@ export default async function DashboardPage({
                   tocStatus={toc?.status ?? null}
 
                   tocVersion={toc?.version ?? null}
+
+                  grantStatus={grantStatusByProject.get(p.id) ?? null}
 
                 />
 

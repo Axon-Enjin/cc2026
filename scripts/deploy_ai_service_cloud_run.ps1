@@ -78,7 +78,8 @@ if (Test-Path $clientProdEnvPath) {
 if ($corsOrigins.Count -eq 0) {
   throw "Set NEXT_PUBLIC_SITE_URL in client/.env.prod so CORS_ORIGINS can be configured for production."
 }
-$envVars["CORS_ORIGINS"] = ($corsOrigins | ConvertTo-Json -Compress)
+# Use -InputObject (not pipe) so a single origin stays a JSON array.
+$envVars["CORS_ORIGINS"] = (ConvertTo-Json -InputObject @($corsOrigins) -Compress)
 
 $requiredApis = @(
   "run.googleapis.com",

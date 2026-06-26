@@ -22,7 +22,7 @@ export function TocProvenanceChip({
       title={
         grounded
           ? `${count} evidence source(s)`
-          : "Not grounded — needs human review"
+          : "Not backed by retrieved evidence — review and edit before submitting"
       }
     >
       <span
