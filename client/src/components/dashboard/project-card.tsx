@@ -35,7 +35,7 @@ export function ProjectCard({ id, need, status, createdAt, tocStatus, tocVersion
 
   return (
     <Link
-      href={`/projects/${id}`}
+      href={`/projects/${id}/toc`}
       className="group block rounded-[18px] bg-[color-mix(in_srgb,var(--color-border)_40%,transparent)] p-1.5 outline-none transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus-visible:[outline:2px_solid_var(--color-primary)] focus-visible:[outline-offset:2px] active:scale-[0.995]"
     >
       <div className="relative flex items-start gap-4 rounded-[12px] bg-[var(--color-surface)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(11,21,51,0.05)] transition-shadow duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:shadow-[var(--shadow-md)]">

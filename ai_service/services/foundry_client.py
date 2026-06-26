@@ -25,6 +25,7 @@ contain the word "json" (a Responses-API constraint for ``text.format`` of type
 import json
 import logging
 from typing import Any, AsyncIterator, Dict, Optional
+from urllib.parse import urlparse
 
 from openai import AsyncAzureOpenAI
 
@@ -66,8 +67,18 @@ class FoundryClient:
         ``https://<resource>.services.ai.azure.com`` (no ``/openai/v1`` suffix).
         """
         if self._client is None:
+            # AsyncAzureOpenAI expects the resource *base* origin
+            # (https://<resource>.services.ai.azure.com) and appends the
+            # deployment path itself. Tolerate a full path in FOUNDRY_ENDPOINT
+            # (e.g. ".../openai/v1/responses") by reducing it to scheme://host.
+            parsed = urlparse(settings.FOUNDRY_ENDPOINT)
+            base_endpoint = (
+                f"{parsed.scheme}://{parsed.netloc}"
+                if parsed.scheme and parsed.netloc
+                else settings.FOUNDRY_ENDPOINT
+            )
             self._client = AsyncAzureOpenAI(
-                azure_endpoint=settings.FOUNDRY_ENDPOINT,
+                azure_endpoint=base_endpoint,
                 api_key=settings.FOUNDRY_API_KEY,
                 api_version=settings.FOUNDRY_API_VERSION,
                 timeout=settings.FOUNDRY_TIMEOUT_SECONDS,
@@ -151,6 +162,36 @@ Generate a Theory of Change following the system instructions. Ground all claims
             return response.output_text or ""
         except Exception as e:
             logger.error(f"ToC generation failed: {e}")
+            raise
+
+    async def generate_interrogation(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float = 0.5,
+    ) -> str:
+        """Generate root-cause clarifying questions as JSON."""
+        input_text = f"""# Need and context
+
+{user_prompt}
+
+Return 2-3 clarifying questions as a single valid JSON object."""
+        kwargs = self._response_kwargs(
+            max_tokens=2000,
+            temperature=temperature,
+            reasoning_effort=settings.FOUNDRY_REASONING_EFFORT_GENERATION,
+        )
+        try:
+            response = await self.client.responses.create(
+                model=self.model,
+                instructions=system_prompt,
+                input=input_text,
+                text={"format": _JSON_FORMAT},
+                **kwargs,
+            )
+            return response.output_text or ""
+        except Exception as e:
+            logger.error(f"Interrogation generation failed: {e}")
             raise
 
     async def _stream_response(
@@ -237,6 +278,44 @@ Give the 2-3 most important failure-mode warnings for this Theory of Change."""
             return response.output_text or ""
         except Exception as e:
             logger.error(f"Critique generation failed: {e}")
+            raise
+
+    async def generate_grant(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float = 0.4,
+    ) -> str:
+        """
+        Draft a funder-matched grant proposal (PRD-F2).
+
+        Lower temperature than ToC generation for grounded, funder-aligned prose
+        (ignored for reasoning models). Returns a JSON string of
+        {"sections": [...]} per the system prompt.
+        """
+        input_text = (
+            f"{user_prompt}\n\nDraft the proposal sections following the system "
+            "instructions. Ground every claim in the provided ToC nodes/evidence or "
+            "mark it [UNVERIFIED - needs human input]. Return a single valid JSON object."
+        )
+
+        kwargs = self._response_kwargs(
+            max_tokens=self.max_tokens_generation,
+            temperature=temperature,
+            reasoning_effort=settings.FOUNDRY_REASONING_EFFORT_GENERATION,
+        )
+
+        try:
+            response = await self.client.responses.create(
+                model=self.model,
+                instructions=system_prompt,
+                input=input_text,
+                text={"format": _JSON_FORMAT},
+                **kwargs,
+            )
+            return response.output_text or ""
+        except Exception as e:
+            logger.error(f"Grant generation failed: {e}")
             raise
 
     async def extract_structured_output(

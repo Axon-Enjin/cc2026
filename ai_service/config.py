@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings
 from typing import List
+from pathlib import Path
 
 
 class Settings(BaseSettings):
@@ -80,6 +81,7 @@ class Settings(BaseSettings):
         # (e.g. running uvicorn from the repo root).
         env_file = str(Path(__file__).resolve().parent / ".env")
         case_sensitive = True
+        extra = "ignore"
 
     # Placeholder values that must never count as real credentials.
     _PLACEHOLDER_KEYS = {"", "your_foundry_api_key_here", "your_foundry_key"}

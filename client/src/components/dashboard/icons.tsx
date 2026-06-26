@@ -131,3 +131,43 @@ export function IconClock(props: IconProps) {
     </Svg>
   );
 }
+
+/** Generate / AI spark. */
+export function IconSparkle(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3.5c.4 3.6 1.9 5.1 5.5 5.5-3.6.4-5.1 1.9-5.5 5.5-.4-3.6-1.9-5.1-5.5-5.5 3.6-.4 5.1-1.9 5.5-5.5Z" />
+      <path d="M18.5 14.5c.2 1.7.9 2.4 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.1 2.3-.8 2.5-2.5Z" />
+    </Svg>
+  );
+}
+
+/** Regenerate / refresh. */
+export function IconRefresh(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M20 11a8 8 0 0 0-14-4.5L4 8M4 4v4h4" />
+      <path d="M4 13a8 8 0 0 0 14 4.5L20 16M20 20v-4h-4" />
+    </Svg>
+  );
+}
+
+/** Export / download. */
+export function IconDownload(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3.5v10M8 10l4 4 4-4" />
+      <path d="M5 17.5v1A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-1" />
+    </Svg>
+  );
+}
+
+/** Funder / institution. */
+export function IconBuilding(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 20.5h16M5.5 20.5V6l6-2.5V20.5M11.5 20.5V9l7 2.5v9" />
+      <path d="M8 8.5v0M8 12v0M8 15.5v0M15 14v0M15 17v0" />
+    </Svg>
+  );
+}

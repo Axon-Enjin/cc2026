@@ -153,15 +153,31 @@ graph TD
 | `chunk` | TEXT | No | — | — | retrieved unit |
 | `embedding` | VECTOR(1536) | Yes | — | ivfflat idx | pgvector |
 
+**Table: `funders`** (donor/agency catalog for PRD-F2 matching)
+
+| Column | Type | Null? | Default | Key/Index | Constraint |
+|--------|------|-------|---------|-----------|------------|
+| `id` | UUID | No | gen_random_uuid() | PK | — |
+| `name` | TEXT | No | — | — | — |
+| `type` | TEXT | No | — | — | CHECK in ('foundation','csr','government','multilateral') |
+| `region` | TEXT | Yes | — | — | — |
+| `focus_areas` | TEXT[] | No | '{}' | — | — |
+| `kpis` | TEXT[] | No | '{}' | — | proposal aligns reporting to these |
+| `priorities` | JSONB | No | '{}' | — | voice + submission requirements |
+| `typical_grant_php_min/max` | NUMERIC | Yes | — | — | indicative range |
+
 **Table: `grant_proposals`**
 
 | Column | Type | Null? | Default | Key/Index | Constraint |
 |--------|------|-------|---------|-----------|------------|
 | `id` | UUID | No | gen_random_uuid() | PK | — |
 | `project_id` | UUID | No | — | FK → projects.id | ON DELETE CASCADE |
-| `funder_id` | UUID | Yes | — | FK → funders.id | — |
-| `sections` | JSONB | No | — | — | human-editable; AI never overwrites human edits |
+| `funder_id` | UUID | Yes | — | FK → funders.id | ON DELETE SET NULL |
+| `title` | TEXT | Yes | — | — | — |
+| `sections` | JSONB | No | — | — | per-section `{key,heading,content,source_ids,ai_generated,edited_by_human}`; AI never overwrites human edits |
 | `amount_php` | NUMERIC | Yes | — | — | feeds BRD-M5 |
+| `status` | TEXT | No | 'draft' | — | CHECK in ('draft','in_review','final') |
+| `updated_at` | TIMESTAMPTZ | No | now() | — | auto-touched by trigger |
 
 **Table: `field_entries`** (web / PWA / SMS ingestion)
 
@@ -218,7 +234,9 @@ graph TD
 | POST | `/api/needs` | Create a need / project (PRD-F1) |
 | POST | `/api/toc/generate` | Proxy to AI service ToC graph (streamed) |
 | POST | `/api/toc/:id/lock` | Lock a ToC (requires failure_prompts_ack) |
-| POST | `/api/grants/draft` | Generate funder-matched proposal (PRD-F2) |
+| POST | `/api/grants/generate` | Stream a funder-matched proposal from the locked ToC (SSE, PRD-F2) |
+| POST | `/api/grants` | Persist a generated proposal draft (role-gated by RLS) |
+| PATCH | `/api/grants/:id` | Save section edits / status / amount (human owns the pen) |
 | POST | `/api/field/entry` | Ingest web/PWA entry (idempotent via client_uuid) |
 | POST | `/api/sms/webhook` | Inbound SMS → parse → field_entry (PRD-F3) |
 | GET | `/api/projects/:id/signals` | Current scale/adapt/stop signals |

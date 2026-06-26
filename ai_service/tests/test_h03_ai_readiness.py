@@ -5,7 +5,7 @@ quiet when Foundry is not configured (config.ai_ready), and verify the health
 and readiness endpoints behave correctly in that state.
 """
 
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 
 import pytest
 from fastapi.testclient import TestClient
@@ -36,9 +36,11 @@ def test_ai_ready_detects_placeholder_keys(key: str, expected: bool):
 
 def test_retrieval_skips_embeddings_when_not_ready():
     """Without credentials, retrieve_evidence must not call the embedding API."""
-    assert settings.ai_ready is False  # default test env has no key
-
+    # Force the unconfigured state so the test is hermetic regardless of whether
+    # a real FOUNDRY_API_KEY happens to be present in the local .env.
     with patch.object(
+        type(settings), "ai_ready", new_callable=PropertyMock, return_value=False
+    ), patch.object(
         evidence_retriever, "_generate_embedding"
     ) as mock_embed, patch.object(
         evidence_retriever, "_fallback_keyword_search", return_value=[]
@@ -66,7 +68,9 @@ def test_health_endpoint_ok(client):
 
 def test_readiness_reports_ai_not_configured_without_probe(client):
     """When AI is unconfigured, readiness must not probe Foundry."""
-    with patch("ai_service.services.foundry_client.foundry_client.health_check") as probe:
+    with patch.object(
+        type(settings), "ai_ready", new_callable=PropertyMock, return_value=False
+    ), patch("ai_service.services.foundry_client.foundry_client.health_check") as probe:
         res = client.get("/health/ready")
 
     assert res.status_code == 200
