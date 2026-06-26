@@ -10,6 +10,7 @@ import {
   normalizeEditedSectionContent,
 } from "./grant-section-body";
 import { ProvenanceLegend } from "@/components/provenance/provenance-legend";
+import { GrantFinalMilestone } from "./grant-final-milestone";
 import { resolveAlignment } from "@/components/mande/types";
 import type { Funder, FunderAlignment, GrantSection } from "./types";
 import {
@@ -48,10 +49,12 @@ function computeAlignment(funder: Funder | null, sections: GrantSection[]): Fund
 
 export function GrantEditor({
   projectId,
+  projectOrgId,
   proposal,
   funder,
 }: {
   projectId: string;
+  projectOrgId?: string | null;
   proposal: Proposal;
   funder: Funder | null;
 }) {
@@ -67,13 +70,15 @@ export function GrantEditor({
   const [exported, setExported] = React.useState(false);
 
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const milestoneRef = React.useRef<HTMLDivElement>(null);
+  const [milestoneAnimate, setMilestoneAnimate] = React.useState(false);
   const alignment = resolveAlignment(
     proposal.alignment,
     computeAlignment(funder, sections),
   );
 
   const persist = React.useCallback(
-    async (patch: Record<string, unknown>) => {
+    async (patch: Record<string, unknown>, previousStatus?: Status) => {
       setSaveState("saving");
       setSaveError(null);
       try {
@@ -85,6 +90,15 @@ export function GrantEditor({
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error ?? "Save failed");
+        }
+        if (patch.status === "final" && previousStatus !== "final") {
+          setMilestoneAnimate(true);
+          requestAnimationFrame(() => {
+            milestoneRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          });
+        }
+        if (patch.status && patch.status !== "final") {
+          setMilestoneAnimate(false);
         }
         setSaveState("saved");
         setTimeout(() => setSaveState("idle"), 1500);
@@ -149,8 +163,9 @@ export function GrantEditor({
   };
 
   const changeStatus = (s: Status) => {
+    const previous = status;
     setStatus(s);
-    persist({ status: s });
+    persist({ status: s }, previous);
   };
 
   const exportMarkdown = async () => {
@@ -195,6 +210,19 @@ export function GrantEditor({
           }}
           className="w-full bg-transparent font-[family-name:var(--font-fraunces)] text-[clamp(1.6rem,3.4vw,2.2rem)] font-semibold tracking-tight text-[var(--color-text)] focus:outline-none"
         />
+
+        {status === "final" ? (
+          <div ref={milestoneRef} className="mt-6">
+            <GrantFinalMilestone
+              funderName={funder?.name}
+              exportLabel={exported ? "Copied + downloaded" : "Export as Markdown"}
+              onExport={exportMarkdown}
+              projectId={projectId}
+              orgId={projectOrgId}
+              animate={milestoneAnimate}
+            />
+          </div>
+        ) : null}
 
         <div className="mt-6 space-y-4">
           {sections.map((s) => (

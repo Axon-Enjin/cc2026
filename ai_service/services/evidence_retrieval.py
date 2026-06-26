@@ -7,6 +7,8 @@ Uses OpenAI embeddings via Microsoft Foundry for semantic similarity.
 
 from typing import List, Dict, Any, Optional, Literal
 import logging
+from urllib.parse import urlparse
+
 from openai import AzureOpenAI
 
 from ai_service.config import settings
@@ -36,18 +38,29 @@ class EvidenceRetriever:
         self.embedding_model = settings.EMBEDDING_MODEL
         self.embedding_dimensions = settings.EMBEDDING_DIMENSIONS
 
+    @staticmethod
+    def _foundry_base_endpoint() -> str:
+        parsed = urlparse(settings.FOUNDRY_ENDPOINT)
+        if parsed.scheme and parsed.netloc:
+            return f"{parsed.scheme}://{parsed.netloc}"
+        return settings.FOUNDRY_ENDPOINT
+
     @property
     def embedding_client(self) -> AzureOpenAI:
         """Lazily construct the embedding client on the Foundry resource."""
         if self._embedding_client is None:
             self._embedding_client = AzureOpenAI(
-                azure_endpoint=settings.FOUNDRY_ENDPOINT,
+                azure_endpoint=self._foundry_base_endpoint(),
                 api_key=settings.FOUNDRY_API_KEY,
                 api_version=settings.FOUNDRY_API_VERSION,
                 timeout=settings.EMBEDDING_TIMEOUT_SECONDS,
                 max_retries=settings.EMBEDDING_MAX_RETRIES,
             )
         return self._embedding_client
+
+    def verify_embedding_deployment(self) -> None:
+        """Raise with a clear message if the embedding deployment is missing."""
+        self._generate_embedding("connectivity check")
     
     def _generate_embedding(self, text: str) -> List[float]:
         """
@@ -299,6 +312,33 @@ class EvidenceRetriever:
             logger.error(f"Failed to seed evidence corpus: {e}")
             raise
     
+    def backfill_embeddings(self) -> int:
+        """Generate embeddings for corpus rows that lack them. Returns update count."""
+        if not settings.ai_ready:
+            raise RuntimeError("Foundry credentials are not configured.")
+
+        self.verify_embedding_deployment()
+
+        client = supabase_client.client
+        rows = (
+            client.table("evidence_sources")
+            .select("id, title, chunk")
+            .is_("embedding", "null")
+            .execute()
+            .data
+            or []
+        )
+        updated = 0
+        for row in rows:
+            text = f"{row['title']}\n\n{row['chunk']}"
+            embedding = self._generate_embedding(text)
+            client.table("evidence_sources").update({"embedding": embedding}).eq(
+                "id", row["id"]
+            ).execute()
+            updated += 1
+            logger.info("Backfilled embedding for evidence source %s", row["id"])
+        return updated
+
     def get_corpus_stats(self) -> Dict[str, Any]:
         """
         Get statistics about the evidence corpus.

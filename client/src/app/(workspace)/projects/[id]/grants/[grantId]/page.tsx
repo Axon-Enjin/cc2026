@@ -130,6 +130,8 @@ export default async function GrantEditorPage({
 
           projectId={projectId}
 
+          projectOrgId={project.org_id}
+
           proposal={{
 
             id: proposal.id,
