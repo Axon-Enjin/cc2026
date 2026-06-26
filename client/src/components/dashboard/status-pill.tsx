@@ -8,6 +8,7 @@ import * as React from "react";
  * A tiny leading dot carries the hue so the label stays legible (AA).
  */
 type ProjectStatus = "draft" | "active" | "scaling" | "stopped";
+type GrantStatus = "draft" | "in_review" | "final";
 
 const STATUS: Record<
   ProjectStatus,
@@ -19,24 +20,43 @@ const STATUS: Record<
   stopped: { label: "Stopped", token: "var(--color-error)" },
 };
 
-export function StatusPill({ status }: { status: string }) {
-  const s = STATUS[(status as ProjectStatus)] ?? STATUS.draft;
+const GRANT_STATUS: Record<
+  GrantStatus,
+  { label: string; token: string }
+> = {
+  draft: { label: "Proposal draft", token: "var(--color-text-muted)" },
+  in_review: { label: "In review", token: "var(--color-data)" },
+  final: { label: "Final", token: "var(--color-success)" },
+};
+
+function StatusChip({ label, token }: { label: string; token: string }) {
   return (
     <span
       className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em]"
       style={{
-        color: s.token,
-        backgroundColor: `color-mix(in srgb, ${s.token} 12%, transparent)`,
+        color: token,
+        backgroundColor: `color-mix(in srgb, ${token} 12%, transparent)`,
       }}
     >
       <span
         className="h-1.5 w-1.5 rounded-full"
-        style={{ backgroundColor: s.token }}
+        style={{ backgroundColor: token }}
         aria-hidden
       />
-      {s.label}
+      {label}
     </span>
   );
+}
+
+export function StatusPill({ status }: { status: string }) {
+  const s = STATUS[(status as ProjectStatus)] ?? STATUS.draft;
+  return <StatusChip label={s.label} token={s.token} />;
+}
+
+/** Latest grant proposal status — shown on dashboard when a proposal exists. */
+export function GrantStatusPill({ status }: { status: string }) {
+  const s = GRANT_STATUS[(status as GrantStatus)] ?? GRANT_STATUS.draft;
+  return <StatusChip label={s.label} token={s.token} />;
 }
 
 export default StatusPill;

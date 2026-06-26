@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { StatusPill } from "./status-pill";
+import { GrantStatusPill, StatusPill } from "./status-pill";
 import { IconArrowUpRight, IconNodes, IconReport } from "./icons";
 
 import { withOrgQuery } from "@/lib/workspace-context";
@@ -13,6 +13,7 @@ export interface ProjectCardProps {
   createdAt: string;
   tocStatus?: string | null;
   tocVersion?: number | null;
+  grantStatus?: string | null;
 }
 
 function formatDate(iso: string): string {
@@ -33,7 +34,7 @@ const TOC_LABEL: Record<string, string> = {
   superseded: "ToC superseded",
 };
 
-export function ProjectCard({ id, orgId, need, status, createdAt, tocStatus, tocVersion }: ProjectCardProps) {
+export function ProjectCard({ id, orgId, need, status, createdAt, tocStatus, tocVersion, grantStatus }: ProjectCardProps) {
   const tocLabel = tocStatus ? TOC_LABEL[tocStatus] ?? "ToC" : "No ToC yet";
   const tocLocked = tocStatus === "locked";
   const projectHref = withOrgQuery(`/projects/${id}`, orgId);
@@ -51,7 +52,11 @@ export function ProjectCard({ id, orgId, need, status, createdAt, tocStatus, toc
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <StatusPill status={status} />
+              {grantStatus ? (
+                <GrantStatusPill status={grantStatus} />
+              ) : (
+                <StatusPill status={status} />
+              )}
               <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
                 {tocLabel}
                 {tocVersion ? <span className="font-mono normal-case tracking-normal"> · v{tocVersion}</span> : null}

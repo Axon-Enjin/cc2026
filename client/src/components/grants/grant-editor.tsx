@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { streamGrantGeneration } from "./grant-stream";
 import { ProvenanceChip } from "./provenance-chip";
+import {
+  GrantSectionBody,
+  normalizeEditedSectionContent,
+} from "./grant-section-body";
+import { ProvenanceLegend } from "@/components/provenance/provenance-legend";
 import { resolveAlignment } from "@/components/mande/types";
 import type { Funder, FunderAlignment, GrantSection } from "./types";
 import {
@@ -54,6 +59,7 @@ export function GrantEditor({
   const [status, setStatus] = React.useState<Status>(proposal.status);
   const [sections, setSections] = React.useState<GrantSection[]>(proposal.sections ?? []);
   const [regenKey, setRegenKey] = React.useState<string | null>(null);
+  const [editingKey, setEditingKey] = React.useState<string | null>(null);
   const [saveState, setSaveState] = React.useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -102,9 +108,12 @@ export function GrantEditor({
   );
 
   const editSection = (key: string, content: string) => {
+    const normalized = normalizeEditedSectionContent(content);
     setSections((prev) => {
       const next = prev.map((s) =>
-        s.key === key ? { ...s, content, edited_by_human: true, ai_generated: false } : s,
+        s.key === key
+          ? { ...s, content: normalized, edited_by_human: true, ai_generated: false }
+          : s,
       );
       scheduleSave(next, title);
       return next;
@@ -117,6 +126,7 @@ export function GrantEditor({
       return;
     }
     if (!proposal.funder_id) return;
+    setEditingKey(null);
     setRegenKey(key);
     await streamGrantGeneration(
       { project_id: projectId, funder_id: proposal.funder_id, only_section: key },
@@ -210,11 +220,13 @@ export function GrantEditor({
                     </button>
                   </div>
                 </div>
-                <textarea
-                  value={s.content}
-                  onChange={(e) => editSection(s.key, e.target.value)}
-                  rows={Math.max(3, Math.ceil(s.content.length / 90))}
-                  className="w-full resize-y rounded-[10px] border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_60%,transparent)] px-3 py-2.5 text-[14px] leading-relaxed text-[var(--color-text)] transition-colors focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none focus:[outline:2px_solid_var(--color-primary)] focus:[outline-offset:1px]"
+                <GrantSectionBody
+                  section={s}
+                  isEditing={editingKey === s.key}
+                  isRegenerating={regenKey === s.key}
+                  onStartEdit={() => setEditingKey(s.key)}
+                  onEndEdit={() => setEditingKey((k) => (k === s.key ? null : k))}
+                  onChange={(content) => editSection(s.key, content)}
                 />
               </div>
             </div>
@@ -310,6 +322,10 @@ export function GrantEditor({
           {exported ? "Copied + downloaded" : "Export as Markdown"}
           <IconDownload size={15} />
         </Button>
+
+        <div className="rounded-[18px] bg-[color-mix(in_srgb,var(--color-border)_40%,transparent)] p-1.5">
+          <ProvenanceLegend />
+        </div>
 
         <p className="px-1 text-[11px] leading-relaxed text-[var(--color-text-muted)]">
           AI drafts; you hold the pen. Edited sections are marked human-edited and are never

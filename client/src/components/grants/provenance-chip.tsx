@@ -24,7 +24,7 @@ export function ProvenanceChip({ section }: { section: GrantSection }) {
     <span
       className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
       style={{ color: token, backgroundColor: `color-mix(in srgb, ${token} 12%, transparent)` }}
-      title={grounded ? `${count} evidence/ToC source(s)` : "Not grounded — needs human review"}
+      title={grounded ? `${count} evidence/ToC source(s)` : "Not backed by retrieved evidence — review and edit before submitting"}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: token }} />
       {grounded ? `${count} cited` : "Unverified"}
